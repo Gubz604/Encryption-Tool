@@ -24,6 +24,11 @@ int main(int argc, char *argv[]) {
 
     printf("Successfully opened: %s\n", argv[2]);
 
+    unsigned char buffer[1024];
+    size_t bytes_read = fread(buffer, 1, sizeof(buffer), file);
+
+    printf("Read: %zu bytes\n", bytes_read);
+
     fclose(file);
     return 0;
 }
