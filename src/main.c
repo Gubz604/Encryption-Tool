@@ -25,9 +25,31 @@ int main(int argc, char *argv[]) {
     printf("Successfully opened: %s\n", argv[2]);
 
     unsigned char buffer[1024];
-    size_t bytes_read = fread(buffer, 1, sizeof(buffer), file);
+    size_t total_bytes = 0;
+    
+    while (1) {
+        size_t bytes_read = fread(buffer, 1, sizeof(buffer), file);
 
-    printf("Read: %zu bytes\n", bytes_read);
+        if (bytes_read > 0) {
+            printf("Read: %zu bytes\n", bytes_read);
+            total_bytes += bytes_read;
+        }
+
+        if (bytes_read < sizeof(buffer)) {
+            if (ferror(file)) {
+                fprintf(stderr, "Error during reading occurred\n");
+                fclose(file);
+                return 1;
+            }
+
+            if (feof(file)) {
+                printf("End of file reached\n");
+                break;
+            }
+        }
+    }
+
+    printf("Total bytes read: %zu\n", total_bytes);
 
     fclose(file);
     return 0;
