@@ -15,5 +15,15 @@ int main(int argc, char *argv[]) {
 
     printf("Command: %s\nFile: %s\n", argv[1], argv[2]);
 
+    FILE *file = fopen(argv[2], "rb");
+
+    if (file == NULL) {
+        fprintf(stderr, "Error: failed to open file: %s\n", argv[2]);
+        return 1;
+    }
+
+    printf("Successfully opened: %s\n", argv[2]);
+
+    fclose(file);
     return 0;
 }
