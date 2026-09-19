@@ -23,10 +23,30 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    FILE *output = fopen("output", "wb");
+    FILE *output;
+
+    if (strcmp(argv[1], "encrypt") == 0) {
+        size_t filename_length = strlen(argv[2]);
+        size_t extension_length = strlen(".enc");
+
+        char output_name[
+            filename_length +
+            extension_length +
+            1
+        ];
+
+        strcpy(output_name, argv[2]);
+        strcat(output_name, ".enc");
+
+        output = fopen(output_name, "wb");
+
+        printf("Input: %s\nOutput: %s\n", argv[2], output_name);
+    } else {
+        output = fopen("output", "wb");
+    }
 
     if (output == NULL) {
-        fprintf(stderr, "Error: failed to open %s\n", "output");
+        fprintf(stderr, "Error: failed to open output file\n");
 
         fclose(file);
         return 1;
