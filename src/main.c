@@ -19,6 +19,16 @@ int main(int argc, char *argv[]) {
 
     if (file == NULL) {
         fprintf(stderr, "Error: failed to open file: %s\n", argv[2]);
+        
+        return 1;
+    }
+
+    FILE *output = fopen("output", "wb");
+
+    if (output == NULL) {
+        fprintf(stderr, "Error: failed to open %s\n", "output");
+
+        fclose(file);
         return 1;
     }
 
@@ -33,12 +43,25 @@ int main(int argc, char *argv[]) {
         if (bytes_read > 0) {
             printf("Read: %zu bytes\n", bytes_read);
             total_bytes += bytes_read;
+
+            size_t output_produced = fwrite(buffer, 1, bytes_read, output);
+        
+            if (output_produced != bytes_read) {
+                fprintf(stderr, "Error: bytes written different than read\nBytes Read: %zu\nBytes written %zu\n", 
+                        bytes_read, output_produced);
+
+
+                fclose(file);
+                fclose(output);
+                return 1;
+            }
         }
 
         if (bytes_read < sizeof(buffer)) {
             if (ferror(file)) {
                 fprintf(stderr, "Error during reading occurred\n");
                 fclose(file);
+                fclose(output);
                 return 1;
             }
 
@@ -52,5 +75,6 @@ int main(int argc, char *argv[]) {
     printf("Total bytes read: %zu\n", total_bytes);
 
     fclose(file);
+    fclose(output);
     return 0;
 }
