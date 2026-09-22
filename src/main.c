@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+int copy_file_data(FILE *input, FILE *output);
+
 int main(int argc, char *argv[]) {
     if (argc != 3) {
         fprintf(stderr, "Error: incorrect number of arguments\nUsage: ./filecrypt <command> <filename>\n");
@@ -54,11 +56,24 @@ int main(int argc, char *argv[]) {
 
     printf("Successfully opened: %s\n", argv[2]);
 
+    int copy_success = copy_file_data(file, output);
+
+    fclose(file);
+    fclose(output);
+
+    if (!copy_success) {
+        fprintf(stderr, "Error copying data from input to output\n");
+        return 1;
+    }
+    return 0;
+}
+
+int copy_file_data(FILE *input, FILE *output) {
     unsigned char buffer[1024];
     size_t total_bytes = 0;
-    
-    while (1) {
-        size_t bytes_read = fread(buffer, 1, sizeof(buffer), file);
+
+    while(1) {
+        size_t bytes_read = fread(buffer, 1, sizeof(buffer), input);
 
         if (bytes_read > 0) {
             printf("Read: %zu bytes\n", bytes_read);
@@ -70,22 +85,18 @@ int main(int argc, char *argv[]) {
                 fprintf(stderr, "Error: bytes written different than read\nBytes Read: %zu\nBytes written %zu\n", 
                         bytes_read, output_produced);
 
-
-                fclose(file);
-                fclose(output);
-                return 1;
+                return 0;
             }
         }
 
         if (bytes_read < sizeof(buffer)) {
-            if (ferror(file)) {
+            if (ferror(input)) {
                 fprintf(stderr, "Error during reading occurred\n");
-                fclose(file);
-                fclose(output);
-                return 1;
+
+                return 0;
             }
 
-            if (feof(file)) {
+            if (feof(input)) {
                 printf("End of file reached\n");
                 break;
             }
@@ -93,8 +104,5 @@ int main(int argc, char *argv[]) {
     }
 
     printf("Total bytes read: %zu\n", total_bytes);
-
-    fclose(file);
-    fclose(output);
-    return 0;
+    return 1;
 }
