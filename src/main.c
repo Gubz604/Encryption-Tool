@@ -1,9 +1,15 @@
 #include <stdio.h>
 #include <string.h>
+#include <sodium.h>
 
 #include "file_io.h"
 
 int main(int argc, char *argv[]) {
+    if (sodium_init() < 0) {
+        fprintf(stderr, "Libsodium failed to initialize\n");
+        return 1;
+    }
+
     if (argc != 3) {
         fprintf(stderr, "Error: incorrect number of arguments\nUsage: ./filecrypt <command> <filename>\n");
         return 1;
