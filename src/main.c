@@ -3,6 +3,7 @@
 #include <sodium.h>
 
 #include "file_io.h"
+#include "crypto.h"
 
 int main(int argc, char *argv[]) {
     if (sodium_init() < 0) {
