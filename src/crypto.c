@@ -27,3 +27,14 @@ int derive_key(unsigned char *key, const char *password, const unsigned char *sa
     }
     return 0;
 }
+
+int initialize_encryption(
+    crypto_secretstream_xchacha20poly1305_state *state, 
+    FileCryptHeader *header, 
+    const unsigned char *key
+) {
+    if (crypto_secretstream_xchacha20poly1305_init_push(state, header->stream_header, key) == 0) {
+        return 1;
+    }
+    return 0;
+}

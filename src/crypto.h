@@ -18,4 +18,11 @@ int initialize_header(FileCryptHeader *header);
 
 int derive_key(unsigned char *key, const char *password, const unsigned char *salt);
 
+int initialize_encryption(
+    crypto_secretstream_xchacha20poly1305_state *state, 
+    FileCryptHeader *header, 
+    const unsigned char *key
+);
+
+
 #endif

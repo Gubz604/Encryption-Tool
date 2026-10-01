@@ -16,6 +16,12 @@ int main(int argc, char *argv[]) {
     } else {
         printf("key failed to be derived\n");
     }
+    crypto_secretstream_xchacha20poly1305_state state;
+    if (initialize_encryption(&state, &header, key)) {
+        printf("Encryption initialize successful\n");
+    } else {
+        printf("Encryption initializtion failed\n");
+    }
 
     if (sodium_init() < 0) {
         fprintf(stderr, "Libsodium failed to initialize\n");
