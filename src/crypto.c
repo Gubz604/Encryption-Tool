@@ -38,3 +38,25 @@ int initialize_encryption(
     }
     return 0;
 }
+
+int encrypt_chunk(
+    crypto_secretstream_xchacha20poly1305_state *state,
+    const unsigned char *input,
+    size_t input_length,
+    unsigned char *output,
+    unsigned long long *output_length
+) {
+    if (crypto_secretstream_xchacha20poly1305_push(
+        state,
+        output,
+        output_length,
+        input,
+        input_length,
+        NULL,
+        0,
+        crypto_secretstream_xchacha20poly1305_TAG_MESSAGE
+    ) == 0) {
+        return 1;
+    }
+    return 0;
+}

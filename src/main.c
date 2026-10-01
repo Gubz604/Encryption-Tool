@@ -22,6 +22,21 @@ int main(int argc, char *argv[]) {
     } else {
         printf("Encryption initializtion failed\n");
     }
+    unsigned char input[1024]= {0};
+    unsigned char output_buffer[sizeof(input) + crypto_secretstream_xchacha20poly1305_ABYTES];
+    unsigned long long output_length;
+    if (encrypt_chunk(&state, input, sizeof(input), output_buffer, &output_length)) {
+        printf("Encrypt chunk returned successfully\n");
+        printf("Size of input is %zu\nSize of ABYTES is %d\nSize of output is %llu",
+        sizeof(input), crypto_secretstream_xchacha20poly1305_ABYTES, output_length);
+    } else {
+        printf("Encrypt chunk failed to return");
+    }
+
+
+    printf("\n\n\n\n");
+
+
 
     if (sodium_init() < 0) {
         fprintf(stderr, "Libsodium failed to initialize\n");

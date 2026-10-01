@@ -24,5 +24,12 @@ int initialize_encryption(
     const unsigned char *key
 );
 
+int encrypt_chunk(
+    crypto_secretstream_xchacha20poly1305_state *state,
+    const unsigned char *input,
+    size_t input_length,
+    unsigned char *output,
+    unsigned long long *output_length
+);
 
 #endif
