@@ -6,6 +6,17 @@
 #include "crypto.h"
 
 int main(int argc, char *argv[]) {
+
+    FileCryptHeader header;
+    initialize_header(&header);
+    const char *password = "password";
+    unsigned char key[crypto_secretstream_xchacha20poly1305_KEYBYTES];
+    if (derive_key(key, password, header.salt)) {
+        printf("Key was derived successfully\n");
+    } else {
+        printf("key failed to be derived\n");
+    }
+
     if (sodium_init() < 0) {
         fprintf(stderr, "Libsodium failed to initialize\n");
         return 1;

@@ -16,4 +16,6 @@ typedef struct {
 
 int initialize_header(FileCryptHeader *header);
 
+int derive_key(unsigned char *key, const char *password, const unsigned char *salt);
+
 #endif
