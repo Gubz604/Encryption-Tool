@@ -14,4 +14,6 @@ typedef struct {
     unsigned char stream_header[crypto_secretstream_xchacha20poly1305_HEADERBYTES];
 } FileCryptHeader;
 
+int initialize_header(FileCryptHeader *header);
+
 #endif
